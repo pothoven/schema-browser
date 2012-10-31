@@ -1,4 +1,4 @@
-class SchemaBrowserGenerator < Rails::Generator::Base
+class SchemaBrowserGenerator < Rails::Generators::Base
   def self.source_root
     @source_root ||= File.join(File.dirname(__FILE__), 'templates')
   end
@@ -27,7 +27,7 @@ class SchemaBrowserGenerator < Rails::Generator::Base
     Dir.mkdir(directory_name) unless File.exists?(directory_name)
 
     javascripts.each do |js|
-      copy_file "assets/javascripts/#{js}", "#{directory_name}/#{js}"
+      copy_file "assets/javascripts/#{js}.js", "#{directory_name}/#{js}.js"
     end
 
     stylesheets = ["doc",
@@ -40,11 +40,17 @@ class SchemaBrowserGenerator < Rails::Generator::Base
     Dir.mkdir(directory_name) unless File.exists?(directory_name)
 
     stylesheets.each do |css|
-      copy_file "assets/stylesheets/#{css}", "#{directory_name}/#{css}"
+      copy_file "assets/stylesheets/#{css}.css", "#{directory_name}/#{css}.css"
     end
 
+    directory_name = "public/xml"
+    Dir.mkdir(directory_name) unless File.exists?(directory_name)
+
+    directory_name = "public/xml/schema_browser"
+    Dir.mkdir(directory_name) unless File.exists?(directory_name)
+
     locales = ["en"]
-    directory_name = "vendor/assets/locales/schema_browser"
+    directory_name = "public/xml/schema_browser/locales"
     Dir.mkdir(directory_name) unless File.exists?(directory_name)
 
     locales.each do |locale|
@@ -52,7 +58,8 @@ class SchemaBrowserGenerator < Rails::Generator::Base
     end
 
     dbs = ["mysql", "sqlite"]
-    directory_name = "vendor/assets/dbs/schema_browser"
+    directory_name = "public/xml/schema_browser/dbs"
+    Dir.mkdir(directory_name) unless File.exists?(directory_name)
     dbs.each do |db|
       Dir.mkdir("#{directory_name}/#{db}") unless File.exists?("#{directory_name}/#{db}")
       copy_file "assets/xml/dbs/#{db}/datatypes.xml", "#{directory_name}/#{db}/datatypes.xml"
@@ -73,5 +80,5 @@ class SchemaBrowserGenerator < Rails::Generator::Base
     copy_file "app/views/layouts/schema_browser.html.erb", "#{directory_name}/schema_browser.html.erb"
 
   end
-  end
+
 end
